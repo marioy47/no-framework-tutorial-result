@@ -19,4 +19,16 @@ if (ENVIRONMENT != 'production') {
 
 $whoops->register();
 
-throw new \Exception("Esto es un error");
+/**
+ * Register HTTP request and response handlers
+ */
+$request = new \Http\HttpRequest($_GET, $_POST, $_COOKIE, $_FILES, $_SERVER);
+$response = new \Http\HttpResponse;
+
+$response->setContent('<h1>Error 404</h1>');
+$response->setStatusCode(404);
+foreach ($response->getHeaders() as $header) {
+    header($header, false);
+}
+
+echo $response->getContent();
